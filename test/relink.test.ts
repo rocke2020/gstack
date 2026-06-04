@@ -408,6 +408,44 @@ describe('gstack-relink (#578)', () => {
   });
 });
 
+describe('post-setup user hook', () => {
+  test('runs executable hook from gstack state dir with setup context', () => {
+    setupMockInstall([]);
+    const hooksDir = path.join(tmpDir, 'hooks');
+    const capturePath = path.join(tmpDir, 'post-setup-env');
+    fs.mkdirSync(hooksDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(hooksDir, 'post-setup'),
+      `#!/usr/bin/env bash
+printf 'host=%s\\ninstall=%s\\nskills=%s\\ncodex=%s\\n' "$GSTACK_HOST" "$GSTACK_INSTALL_DIR" "$GSTACK_SKILLS_DIR" "$GSTACK_CODEX_SKILLS_DIR" > "${capturePath}"
+`,
+    );
+    fs.chmodSync(path.join(hooksDir, 'post-setup'), 0o755);
+
+    run(`${BIN}/gstack-run-post-setup-hook`, {
+      GSTACK_HOST: 'codex',
+      GSTACK_INSTALL_DIR: installDir,
+      GSTACK_SKILLS_DIR: skillsDir,
+      GSTACK_CODEX_SKILLS_DIR: skillsDir,
+    });
+
+    expect(fs.readFileSync(capturePath, 'utf-8')).toBe(
+      `host=codex\ninstall=${installDir}\nskills=${skillsDir}\ncodex=${skillsDir}\n`,
+    );
+  });
+
+  test('does nothing when no post-setup hook is installed', () => {
+    const output = run(`${BIN}/gstack-run-post-setup-hook`, {
+      GSTACK_HOST: 'codex',
+      GSTACK_INSTALL_DIR: installDir,
+      GSTACK_SKILLS_DIR: skillsDir,
+      GSTACK_CODEX_SKILLS_DIR: skillsDir,
+    });
+
+    expect(output).toBe('');
+  });
+});
+
 describe('upgrade migrations', () => {
   const MIGRATIONS_DIR = path.join(ROOT, 'gstack-upgrade', 'migrations');
 

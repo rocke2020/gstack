@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Run the user's optional post-setup hook.
+set -euo pipefail
+
+STATE_DIR="${GSTACK_HOME:-${GSTACK_STATE_DIR:-$HOME/.gstack}}"
+HOOK="$STATE_DIR/hooks/post-setup"
+
+[ -x "$HOOK" ] || exit 0
+
+"$HOOK"

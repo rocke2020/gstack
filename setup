@@ -1503,3 +1503,12 @@ fi
 if [ "$NO_TEAM_MODE" -eq 1 ] && [ -x "$SETTINGS_HOOK" ]; then
   "$SETTINGS_HOOK" remove-source --source plan-tune-cathedral 2>/dev/null || true
 fi
+
+POST_SETUP_HOOK="$SOURCE_GSTACK_DIR/bin/gstack-run-post-setup-hook"
+if [ -x "$POST_SETUP_HOOK" ]; then
+  GSTACK_HOST="$HOST" \
+  GSTACK_INSTALL_DIR="$SOURCE_GSTACK_DIR" \
+  GSTACK_SKILLS_DIR="$INSTALL_SKILLS_DIR" \
+  GSTACK_CODEX_SKILLS_DIR="$CODEX_SKILLS" \
+    "$POST_SETUP_HOOK" || log "  warning: post-setup hook failed"
+fi
