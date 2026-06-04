@@ -417,7 +417,7 @@ describe('post-setup user hook', () => {
     fs.writeFileSync(
       path.join(hooksDir, 'post-setup'),
       `#!/usr/bin/env bash
-printf 'host=%s\\ninstall=%s\\nskills=%s\\ncodex=%s\\n' "$GSTACK_HOST" "$GSTACK_INSTALL_DIR" "$GSTACK_SKILLS_DIR" "$GSTACK_CODEX_SKILLS_DIR" > "${capturePath}"
+printf 'host=%s\\ninstall=%s\\nskills=%s\\nclaude=%s\\ncodex=%s\\n' "$GSTACK_HOST" "$GSTACK_INSTALL_DIR" "$GSTACK_SKILLS_DIR" "$GSTACK_CLAUDE_SKILLS_DIR" "$GSTACK_CODEX_SKILLS_DIR" > "${capturePath}"
 `,
     );
     fs.chmodSync(path.join(hooksDir, 'post-setup'), 0o755);
@@ -426,11 +426,12 @@ printf 'host=%s\\ninstall=%s\\nskills=%s\\ncodex=%s\\n' "$GSTACK_HOST" "$GSTACK_
       GSTACK_HOST: 'codex',
       GSTACK_INSTALL_DIR: installDir,
       GSTACK_SKILLS_DIR: skillsDir,
+      GSTACK_CLAUDE_SKILLS_DIR: skillsDir,
       GSTACK_CODEX_SKILLS_DIR: skillsDir,
     });
 
     expect(fs.readFileSync(capturePath, 'utf-8')).toBe(
-      `host=codex\ninstall=${installDir}\nskills=${skillsDir}\ncodex=${skillsDir}\n`,
+      `host=codex\ninstall=${installDir}\nskills=${skillsDir}\nclaude=${skillsDir}\ncodex=${skillsDir}\n`,
     );
   });
 
@@ -439,6 +440,7 @@ printf 'host=%s\\ninstall=%s\\nskills=%s\\ncodex=%s\\n' "$GSTACK_HOST" "$GSTACK_
       GSTACK_HOST: 'codex',
       GSTACK_INSTALL_DIR: installDir,
       GSTACK_SKILLS_DIR: skillsDir,
+      GSTACK_CLAUDE_SKILLS_DIR: skillsDir,
       GSTACK_CODEX_SKILLS_DIR: skillsDir,
     });
 

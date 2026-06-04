@@ -1509,6 +1509,7 @@ if [ -x "$POST_SETUP_HOOK" ]; then
   GSTACK_HOST="$HOST" \
   GSTACK_INSTALL_DIR="$SOURCE_GSTACK_DIR" \
   GSTACK_SKILLS_DIR="$INSTALL_SKILLS_DIR" \
+  GSTACK_CLAUDE_SKILLS_DIR="$HOME/.claude/skills" \
   GSTACK_CODEX_SKILLS_DIR="$CODEX_SKILLS" \
     "$POST_SETUP_HOOK" || log "  warning: post-setup hook failed"
 fi
